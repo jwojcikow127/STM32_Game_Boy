@@ -30,6 +30,11 @@
 #define ST7735S_GAMCTRP1		0xe0
 #define ST7735S_GAMCTRN1		0xe1
 
+//definition of lcd offset( lcd controller requires sending a offset to position of drawing a points)
+#define LCD_OFFSET_X 1
+#define LCD_OFFSET_Y 2
+
+
 //definition of macro used for bytes comparing in fucton lcd_send
 #define CMD(x) ((x) | 0x100)
 
@@ -63,6 +68,13 @@ static void lcd_send(uint16_t value)
 	}
 }
 
+// function used for sending 16 bit words
+static void lcd_data16(uint16_t value)
+{
+	lcd_data(value >> 8); //bit shift operator
+	lcd_data(value);
+}
+
 //table which contains data to tft display initialization
 static const uint16_t init_table[] = {
 		  CMD(ST7735S_FRMCTR1), 0x01, 0x2c, 0x2d,
@@ -85,6 +97,19 @@ static const uint16_t init_table[] = {
 		  CMD(ST7735S_MADCTL), 0xa0,
 };
 
+//function used for setting coordinates of a window to draw something
+static void lcd_set_window(int x, int y, int width, int height)
+{
+	lcd_cmd(ST7735S_CASET);
+	lcd_data16(LCD_OFFSET_X + x);
+	lcd_data16(LCD_OFFSET_X + x + width - 1);
+
+	lcd_cmd(ST7735S_RASET);
+	lcd_data16(LCD_OFFSET_Y + y);
+	lcd_data16(LCD_OFFSET_Y + y + height - 1);
+}
+
+
 //function used for initialization of tft display
 void lcd_init(void)
 {
@@ -104,8 +129,17 @@ void lcd_init(void)
 	lcd_cmd(ST7735S_SLPOUT);
 	HAL_Delay(120);
 	lcd_cmd(ST7735S_DISPON);
+}
 
+void lcd_fill_box(int x, int y, int width, int height, uint16_t color)
+{
+	lcd_set_window(x, y, width, height);
 
+	lcd_cmd(ST7735S_RAMWR);
 
+	for(int i = 0; i < width * height; i++)
+	{
+		lcd_data16(color);
+	}
 }
 

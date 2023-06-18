@@ -94,6 +94,8 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   lcd_init();
+  lcd_fill_box(0, 0, 160, 128, WHITE);
+  lcd_fill_box(0, 0, 160, 64, RED);
   while (1)
   {
     /* USER CODE END WHILE */
