@@ -24,6 +24,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "lcd.h"
+#include "papiezz.c"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,7 +97,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   lcd_init();
   lcd_fill_box(0, 0, 160, 128, WHITE);
+  /*
   lcd_fill_box(0, 0, 160, 64, RED);
+  for(int i = 0; i < 128; i++)
+  {
+	  lcd_put_pixel(i, i, GREEN);
+	  lcd_put_pixel(127 - i, i, GREEN);
+
+  }
+  */
+  lcd_draw_image(0, 0, 160, 128, papiez);
   while (1)
   {
     /* USER CODE END WHILE */

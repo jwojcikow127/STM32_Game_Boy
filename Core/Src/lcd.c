@@ -130,7 +130,7 @@ void lcd_init(void)
 	HAL_Delay(120);
 	lcd_cmd(ST7735S_DISPON);
 }
-
+// function used for drawing a rectangle
 void lcd_fill_box(int x, int y, int width, int height, uint16_t color)
 {
 	lcd_set_window(x, y, width, height);
@@ -142,4 +142,27 @@ void lcd_fill_box(int x, int y, int width, int height, uint16_t color)
 		lcd_data16(color);
 	}
 }
+
+//function used for drawing a single pixel
+void lcd_put_pixel(int x, int y, uint16_t color)
+{
+	lcd_fill_box(x, y, 1, 1, color);
+}
+
+//function used to draw images
+void lcd_draw_image(int x, int y, int width, int height, const uint8_t* data)
+{
+	lcd_set_window(x,y,width,height);
+
+	lcd_cmd(ST7735S_RAMWR);
+	for(int i = 0; i < width * height * 2; i++)
+	{
+		lcd_data(data[i]);
+	}
+
+
+
+}
+
+
 

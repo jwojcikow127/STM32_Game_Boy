@@ -25,5 +25,7 @@
 
 void lcd_init(void);
 void lcd_fill_box(int x, int y, int width, int height, uint16_t color);
+void lcd_put_pixel(int x, int y, uint16_t color);
+void lcd_draw_image(int x, int y, int width, int height, const uint8_t* data);
 
 
